@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learn.Dao.BorrowDao">
+
+    <resultMap id="BorrowResultMap" type="Borrow">
+        <result property="bookId" column="book_id" />
+        <result property="userId" column="user_id" />
+        <result property="borrowTime" column="borrow_time"/>
+    </resultMap>
+
+    <select id="selectByPageAndCondition" resultMap="BorrowResultMap">
+        select *
+        from borrow
+        <where>
+            <if test="borrow.bookId != null and borrow.bookId != ''">
+                and book_id = #{borrow.bookId}
+            </if>
+            <if test="borrow.userId != null and borrow.userId != ''">
+                and user_id = #{borrow.userId}
+            </if>
+            <if test="borrow.borrowTime != null and borrow.borrowTime != ''">
+                and borrow_time like #{borrow.borrowTime}
+            </if>
+        </where>
+        limit #{begin} , #{size}
+    </select>
+    <select id="selectTotalCountByCondition" resultType="java.lang.Integer">
+        select count(*) from borrow
+        <where>
+            <if test="bookId != null and bookId != ''">
+                and book_id like #{bookId}
+            </if>
+            <if test="userId != null and userId != ''">
+                and user_id like #{userId}
+            </if>
+            <if test="borrowTime != null and borrowTime != ''">
+                and borrow_time like #{borrowTime}
+            </if>
+        </where>
+    </select>
+</mapper>

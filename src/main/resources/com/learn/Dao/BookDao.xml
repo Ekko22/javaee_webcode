@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learn.Dao.BookDao">
+
+    <resultMap id="BookResultMap" type="Book">
+        <result property="id" column="book_id" />
+        <result property="ISBN" column="book_ISBN" />
+        <result property="name" column="book_name"/>
+        <result property="publisher" column="book_publisher"/>
+        <result property="author" column="book_author"/>
+        <result property="states" column="book_states"/>
+    </resultMap>
+    <update id="updateById">
+        update book
+        <set>
+            <if test="book.ISBN != null and book.ISBN != ''">book_ISBN = #{book.ISBN},</if>
+            <if test="book.name != null and book.name != ''">book_name = #{book.name},</if>
+            <if test="book.publisher != null and book.publisher != ''">book_publisher = #{book.publisher},</if>
+            <if test="book.author != null and book.author != ''">book_author = #{book.author},</if>
+            <if test="book.states != null and book.states != ''">book_states = #{book.states},</if>
+        </set>
+        where book_id = #{id}
+    </update>
+
+    <delete id="deleteByIds">
+        delete from book where book_id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <select id="selectByPageAndCondition" resultMap="BookResultMap">
+        select *
+        from book
+        <where>
+            <if test="book.ISBN != null and book.ISBN != ''">
+                and book_ISBN like #{book.ISBN}
+            </if>
+            <if test="book.name != null and book.name != ''">
+                and book_name like #{book.name}
+            </if>
+            <if test="book.publisher != null and book.publisher != ''">
+                and book_publisher like #{book.publisher}
+            </if>
+            <if test="book.author != null and book.author != ''">
+                and book_author like #{book.author}
+            </if>
+            <if test="book.states != null and book.states != ''">
+                and book_states like #{book.states}
+            </if>
+        </where>
+        limit #{begin} , #{size}
+    </select>
+    <select id="selectTotalCountByCondition" resultType="java.lang.Integer">
+        select count(*) from book
+        <where>
+            <if test="ISBN != null and ISBN != ''">
+                and book_ISBN like #{ISBN}
+            </if>
+            <if test="name != null and name != ''">
+                and book_name like #{name}
+            </if>
+            <if test="publisher != null and publisher != ''">
+                and book_publisher like #{publisher}
+            </if>
+            <if test="author != null and author != ''">
+                and book_author like #{author}
+            </if>
+            <if test="states != null and states != ''">
+                and book_states like #{states}
+            </if>
+        </where>
+    </select>
+</mapper>

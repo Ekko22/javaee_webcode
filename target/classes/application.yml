@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    password: py011121
+    url: jdbc:mysql://localhost:3306/book
+    username: ekko
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+#设置别名
+mybatis:
+  type-aliases-package: com.learn.Domain
+
+logging:
+  level:
+    com:
+      learn:
+        Dao: debug
+server:
+  port: 8081
